@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>泛科學院 AI 學習資源網 - 學生專區</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#10b981',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-answer.open {
+            max-height: 500px; /* 足夠大的高度以容納內容 */
+        }
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        .faq-icon.open {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-effect border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-primary text-2xl"></i>
+                    <span class="font-bold text-xl text-dark">泛科 AI 學生小幫手</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#hero" class="text-slate-600 hover:text-primary transition">首頁</a>
+                    <a href="#resources" class="text-slate-600 hover:text-primary transition">AI 資源庫</a>
+                    <a href="#faq" class="text-slate-600 hover:text-primary transition">常見問題 FAQ</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero & Search Section -->
+    <header id="hero" class="pt-32 pb-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-dark mb-6 leading-tight">
+                讓 AI 成為你的最強學伴！<br>
+                <span class="text-primary text-3xl md:text-4xl">擺脫低效，研究產出直接升級</span>
+            </h1>
+            <p class="text-lg text-slate-600 mb-10">
+                基於泛科學院教學精華，為學生專屬打造的 AI 工具庫與疑難排解指南。<br>無論是做報告、寫論文、還是準備簡報，這裡都有解答。
+            </p>
+            
+            <!-- Search Box -->
+            <div class="relative max-w-2xl mx-auto">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-search text-slate-400"></i>
+                </div>
+                <input type="text" id="searchInput" 
+                    class="block w-full pl-12 pr-4 py-4 rounded-full border border-slate-300 shadow-sm focus:ring-2 focus:ring-primary focus:border-primary text-lg transition" 
+                    placeholder="搜尋工具名稱、用途 (如：簡報、論文、NotebookLM)...">
+                <button id="clearSearch" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 hidden">
+                    <i class="fa-solid fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <!-- Search Results Indicator -->
+        <div id="searchIndicator" class="hidden mb-8 text-center text-slate-600 font-medium">
+            <!-- Dynamically populated -->
+        </div>
+
+        <!-- Resource Library Section -->
+        <section id="resources" class="mb-20">
+            <div class="flex items-center gap-3 mb-8">
+                <i class="fa-solid fa-toolbox text-2xl text-secondary"></i>
+                <h2 class="text-3xl font-bold text-dark">AI 資源庫</h2>
+            </div>
+            <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Resource cards will be populated by JS -->
+            </div>
+            <div id="noResources" class="hidden text-center py-10 text-slate-500">
+                <i class="fa-regular fa-folder-open text-4xl mb-3"></i>
+                <p>找不到符合條件的工具資源</p>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="mb-20">
+            <div class="flex items-center gap-3 mb-8">
+                <i class="fa-solid fa-circle-question text-2xl text-primary"></i>
+                <h2 class="text-3xl font-bold text-dark">學生必看 FAQ</h2>
+            </div>
+            <div id="faqList" class="space-y-4 max-w-4xl">
+                <!-- FAQs will be populated by JS -->
+            </div>
+            <div id="noFaqs" class="hidden text-center py-10 text-slate-500">
+                <i class="fa-regular fa-comment-dots text-4xl mb-3"></i>
+                <p>找不到符合條件的常見問題</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-slate-300 py-10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="mb-2">資料來源：泛科學院 AI 教學影片內容</p>
+            <p class="text-sm text-slate-500">&copy; 2026 AI 學習資源網 - 僅供學習參考使用</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // --- Data Source (Extracted from NotebookLM Transcripts) ---
+        const resourceData = [
+            {
+                title: "NotebookLM",
+                category: "筆記與文獻",
+                icon: "fa-book",
+                desc: "超神級筆記整理工具！能匯入 PDF、網址，一秒總結 YouTube 影片。最新功能還能把資料生成「AI Podcast 雙人對談」以及精美的投影片，是學生的最強大腦。",
+                tags: ["筆記", "摘要", "簡報", "Podcast"]
+            },
+            {
+                title: "Claude (Anthropic)",
+                category: "寫作與分析",
+                icon: "fa-pen-nib",
+                desc: "擁有超大容量（可讀 10 萬字），是讀長篇論文的最佳助手。幻覺相對較少，還能處理 CSV 檔案進行數據分析，是研究生必備神器。",
+                tags: ["論文", "長文分析", "數據處理"]
+            },
+            {
+                title: "Gemini (Deep Research)",
+                category: "資料搜尋",
+                icon: "fa-magnifying-glass-chart",
+                desc: "Google 推出的深度研究功能，一鍵幫你爬梳上百個國內外網頁，生成超詳細研究報告，並能將報告轉為客製化網頁或測驗。",
+                tags: ["研究報告", "資料搜集", "Google"]
+            },
+            {
+                title: "Gamma / SlidesAI",
+                category: "簡報製作",
+                icon: "fa-desktop",
+                desc: "AI 簡報生成神器。Gamma 能將高達 6000 字的長文快速轉成大師級簡報並配圖；SlidesAI 則完美整合於 Google 簡報中。",
+                tags: ["PPT", "簡報", "排版"]
+            },
+            {
+                title: "Napkin AI",
+                category: "圖表生成",
+                icon: "fa-chart-pie",
+                desc: "完全免費！只要貼上文字，就能秒生成設計感爆棚的視覺化圖表、心智圖或流程圖，做報告排版超好用。",
+                tags: ["圖表", "心智圖", "視覺化"]
+            },
+            {
+                title: "Perplexity",
+                category: "AI 搜尋引擎",
+                icon: "fa-globe",
+                desc: "強調即時網路資料爬取的 AI 搜尋引擎。做報告找最新資料（如剛發布的論文或時事）時，比傳統搜尋引擎更精準，並會附上來源出處。",
+                tags: ["搜尋", "找資料", "即時資訊"]
+            },
+            {
+                title: "Speak AI",
+                category: "外語學習",
+                icon: "fa-language",
+                desc: "專為開口說量身打造的 AI App。可以設定各種情境對話（如面試、日常閒聊），24 小時隨時練習英文口說。",
+                tags: ["英文", "口說", "App"]
+            },
+            {
+                title: "Memo AI / Whisper JAX",
+                category: "影音處理",
+                icon: "fa-closed-captioning",
+                desc: "給它影片網址，就能自動幫你生出外語影片的雙語字幕、逐字稿跟內容摘要。看國外無字幕教學影片的救星！",
+                tags: ["字幕", "逐字稿", "翻譯"]
+            },
+            {
+                title: "Recraft",
+                category: "素材生成",
+                icon: "fa-vector-square",
+                desc: "首個支援生成 SVG 向量圖的免費 AI！做簡報需要各種無背景插圖、icon 或 3D 裝飾圖時，用它秒做完。",
+                tags: ["圖片生成", "向量圖", "簡報插圖"]
+            }
+        ];
+
+        const faqData = [
+            {
+                q: "文獻跟論文太多讀不完，AI 能幫忙嗎？",
+                a: "絕對可以！你可以使用 <strong>NotebookLM</strong> 將所有文獻（PDF 或網址）匯入，它會幫你整合並可以回答你關於這些文獻的問題。如果是單篇超長論文（如幾十萬字），推薦使用 <strong>Claude 免費版</strong>，它的超長文本處理能力極佳，且「幻覺」較少，非常適合研究生用來整理文獻探討。"
+            },
+            {
+                q: "明天就要上台報告，簡報做不出來怎麼辦？",
+                a: "別慌！如果你已經有報告的文字內容（如幾千字的草稿），可以直接丟給 <strong>Gamma</strong>，它會自動幫你分頁、排版並配圖。另外，<strong>NotebookLM</strong> 最近的更新也支援直接將整理好的筆記一鍵生成簡報。如果習慣用 Google 簡報，可以安裝 <strong>Plus AI</strong> 或 <strong>SlidesAI</strong> 外掛輔助。"
+            },
+            {
+                q: "用 AI 寫作業或報告，怕被「AI 偵測器」抓到怎麼辦？",
+                a: "AI 偵測器大多是根據特定句型、完美的排版和標點符號來判斷。泛科學院建議：<br>1. AI 應作為「輔助思考與潤稿」工具，而非直接複製貼上。<br>2. 可以在 Prompt 中加入指示，例如：要求 AI 模擬人類隨機排版、加入台灣慣用口語詞彙、甚至加入微小的不完美（如首行縮排不一致），就能大幅降低「AI 味」。"
+            },
+            {
+                q: "不知道怎麼寫「學習歷程自述」或探索科系？",
+                a: "你可以利用 ChatGPT 或 Claude，給定特定的 Prompt（例如設定它為『高中輔導老師與大學面試官』），以互動問答的方式引導你一步步釐清科系特質，並根據你的經歷草擬出具體的學習歷程自述框架，不再對著空白文件發呆。"
+            },
+            {
+                q: "有什麼好用的 AI 心智圖工具可以幫助我理解複雜概念？",
+                a: "推薦 <strong>Whimsical、Xmind AI 或 MyMap</strong>。只要給 AI 一個關鍵字（例如：核融合的基礎知識），AI 就能瞬間無中生有，幫你生成一張條理分明的知識架構心智圖，幫助你秒懂艱深課題。"
+            },
+            {
+                q: "除了用來寫作業，AI 還有什麼對學生有用的功能？",
+                a: "AI 可以幫你整理上課錄音（使用 <strong>Memo AI</strong> 轉逐字稿並摘要）、幫你練習英文口說（使用 <strong>Speak AI</strong> 設定情境對話）、用 <strong>Napkin AI</strong> 把枯燥的文字變成漂亮的視覺化圖表，或是用 <strong>Gemini Deep Research</strong> 自動幫你搜集最新報告資料。"
+            }
+        ];
+
+        // --- DOM Elements ---
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearch');
+        const resourceGrid = document.getElementById('resourceGrid');
+        const faqList = document.getElementById('faqList');
+        const noResources = document.getElementById('noResources');
+        const noFaqs = document.getElementById('noFaqs');
+        const searchIndicator = document.getElementById('searchIndicator');
+
+        // --- Render Functions ---
+        function renderResources(data) {
+            resourceGrid.innerHTML = '';
+            if (data.length === 0) {
+                resourceGrid.classList.add('hidden');
+                noResources.classList.remove('hidden');
+                return;
+            }
+            resourceGrid.classList.remove('hidden');
+            noResources.classList.add('hidden');
+
+            data.forEach(item => {
+                const tagsHtml = item.tags.map(tag => 
+                    `<span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">${tag}</span>`
+                ).join('');
+
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl p-6 shadow-sm border border-slate-100 card-hover flex flex-col h-full';
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center text-primary text-xl flex-shrink-0">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-dark leading-tight">${item.title}</h3>
+                            <span class="text-xs font-medium text-slate-500">${item.category}</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm flex-grow mb-4">${item.desc}</p>
+                    <div class="mt-auto pt-4 border-t border-slate-50">
+                        ${tagsHtml}
+                    </div>
+                `;
+                resourceGrid.appendChild(card);
+            });
+        }
+
+        function renderFaqs(data) {
+            faqList.innerHTML = '';
+            if (data.length === 0) {
+                faqList.classList.add('hidden');
+                noFaqs.classList.remove('hidden');
+                return;
+            }
+            faqList.classList.remove('hidden');
+            noFaqs.classList.add('hidden');
+
+            data.forEach((item, index) => {
+                const faqItem = document.createElement('div');
+                faqItem.className = 'bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm';
+                
+                // Keep the first FAQ open by default on initial load if no search
+                const isOpen = index === 0 && searchInput.value === '';
+
+                faqItem.innerHTML = `
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center bg-white hover:bg-slate-50 transition focus:outline-none" onclick="toggleFaq(this)">
+                        <span class="font-bold text-dark text-lg pr-4">${item.q}</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 faq-icon ${isOpen ? 'open' : ''}"></i>
+                    </button>
+                    <div class="faq-answer px-6 bg-slate-50 border-t border-slate-100 ${isOpen ? 'open' : ''}">
+                        <div class="py-4 text-slate-600 leading-relaxed">
+                            ${item.a}
+                        </div>
+                    </div>
+                `;
+                faqList.appendChild(faqItem);
+            });
+        }
+
+        // --- Interaction Logic ---
+        window.toggleFaq = function(button) {
+            const answer = button.nextElementSibling;
+            const icon = button.querySelector('.faq-icon');
+            
+            answer.classList.toggle('open');
+            icon.classList.toggle('open');
+        };
+
+        function filterData() {
+            const query = searchInput.value.toLowerCase().trim();
+            
+            // Toggle clear button
+            if (query.length > 0) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+
+            // Filter Resources
+            const filteredResources = resourceData.filter(item => 
+                item.title.toLowerCase().includes(query) ||
+                item.category.toLowerCase().includes(query) ||
+                item.desc.toLowerCase().includes(query) ||
+                item.tags.some(tag => tag.toLowerCase().includes(query))
+            );
+
+            // Filter FAQs
+            const filteredFaqs = faqData.filter(item => 
+                item.q.toLowerCase().includes(query) ||
+                item.a.toLowerCase().includes(query)
+            );
+
+            // Update UI
+            renderResources(filteredResources);
+            renderFaqs(filteredFaqs);
+
+            // Update Indicator
+            if (query.length > 0) {
+                searchIndicator.classList.remove('hidden');
+                searchIndicator.innerHTML = `搜尋 "${query}" : 找到 ${filteredResources.length} 個資源，${filteredFaqs.length} 個問題`;
+                
+                // Automatically open FAQ answers if searching
+                document.querySelectorAll('.faq-answer').forEach(el => el.classList.add('open'));
+                document.querySelectorAll('.faq-icon').forEach(el => el.classList.add('open'));
+            } else {
+                searchIndicator.classList.add('hidden');
+            }
+        }
+
+        // --- Event Listeners ---
+        searchInput.addEventListener('input', filterData);
+        
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            filterData();
+            searchInput.focus();
+        });
+
+        // --- Initial Render ---
+        renderResources(resourceData);
+        renderFaqs(faqData);
+
+    </script>
+</body>
+</html>
